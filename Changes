@@ -32,3 +32,11 @@ List of file changed:
 - Changes
 - README
 - DBD/TSM.pm (just change the version)
+
+** VERSION 0.03 - Thu Mar 10 21:16:37 CET 2005
+
+* BUG2:
+forget configure.pl
+
+* RESPONSE:
+Correct
