@@ -1,6 +1,34 @@
-Revision history for Perl extension DBD::TSM.
+** MODULE: DBD::TSM
 
-0.01  Sat Feb 26 20:51:46 2005
-	- original version; created by h2xs 1.23 with options
-		-A -X -n DBD::TSM
+Revision history for Perl extension DBD::TSM
 
+** VERSION 0.01 - Sat Feb 26 20:51:46 2005
+
+Original version; created by h2xs 1.23 with options -A -X -n DBD::TSM
+
+** VERSION 0.02 - Sun Mar  6 21:54:06 CET 2005
+
+* BUG1:
+This message about DBD-TSM was sent to you by corion@corion.net <corion@corion.net> via rt.cpan.org
+
+Full context and any attached attachments can be found at:
+<URL: https://rt.cpan.org/Ticket/Display.html?id=11767 >
+
+Hello,
+
+the Makefile.PL distributed with DBD::TSM 0.01 enters an infinite loop 
+when no terminal is connected to give input, thus eating CPU ressources 
+when the module is installed unattended. The Makefile.PL should instead 
+bail out when it finds no terminal connected and can't find a 
+proper/fitting directory itself.
+
+Thank you,
+-max
+
+* RESPONSE:
+Right, I do not think about silent use of my Makefile.PL. I do a correction to improve this point.
+List of file changed:
+- Makefile.PL
+- Changes
+- README
+- DBD/TSM.pm (just change the version)

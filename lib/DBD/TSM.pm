@@ -33,7 +33,8 @@ use Carp;
 
 our ($VERSION,$err,$errstr,$sqlstate,$drh);
 
-$VERSION = '0.01';
+$VERSION = '0.02';
+## Error in Makefile.PL, see change file
 
 # Gestion des erreurs DBI
 $err      = 0;             # DBI::err

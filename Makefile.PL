@@ -22,18 +22,21 @@ sub tsm_choose_dsm_dir {
                 $dsm_config,
                 );
     }
-    ($^O eq 'linux') and return (File::Spec->catfile("","opt","tivoli","tsm","client","ba","bin"),
-                                 File::Spec->catfile("","opt","tivoli","tsm","client","ba","bin","dsmadmc"),
-                                 File::Spec->catfile("","opt","tivoli","tsm","client","ba","bin","dsm.sys"),
+    ($^O eq 'linux'   or
+     $^O eq 'solaris' ) and return (File::Spec->catfile("","opt","tivoli","tsm","client","ba","bin"),
+                                    File::Spec->catfile("","opt","tivoli","tsm","client","ba","bin","dsmadmc"),
+                                    File::Spec->catfile("","opt","tivoli","tsm","client","ba","bin","dsm.sys"),
+                                   );
+    ($^O eq 'aix'     or
+     $^O eq 'irix'    or
+     $^O eq 'hpux')      and return (File::Spec->catfile("","usr","tivoli","tsm","client","ba","bin"),
+                                     File::Spec->catfile("","usr","bin","dsmadmc"),
+                                     File::Spec->catfile("","usr","tivoli","tsm","client","ba","bin","dsm.sys"),
                                  );
-    ($^O eq 'aix')   and return (File::Spec->catfile("","usr","tivoli","tsm","client","ba","bin"),
-                                 File::Spec->catfile("","usr","bin","dsmadmc"),
-                                 File::Spec->catfile("","usr","tivoli","tsm","client","ba","bin","dsm.sys"),
-                                 );
-    ($^O eq 'win32')   and return (File::Spec->catfile($ENV{ProgramFiles},"tivoli","tsm","client","ba"),
-                                   File::Spec->catfile($ENV{ProgramFiles},"tivoli","tsm","client","ba","dsmadmc"),
-                                   File::Spec->catfile($ENV{ProgramFiles},"tivoli","tsm","client","ba","dsm.opt"),
-                                  );
+    ($^O eq 'MSWin32')   and return (File::Spec->catfile($ENV{ProgramFiles},"tivoli","tsm","baclient"),
+                                     File::Spec->catfile($ENV{ProgramFiles},"tivoli","tsm","baclient","dsmadmc"),
+                                     File::Spec->catfile($ENV{ProgramFiles},"tivoli","tsm","baclient","dsm.opt"),
+                                    );
     return;
 }
 
@@ -43,32 +46,25 @@ sub config_macro {
     unless (-d $dsm_dir    and
             -x $dsmadmc    and
             -f $dsm_config) {
-            print "Could not detect automatically prerequisite. Help me:\n";
-            my $value;
-            while (! -d $value) {
-                $value=prompt("Install dir for TSM Client where (dsmc, dsmadmc, dsm.*) exists",$dsm_dir);
-            }
-            $dsm_dir=$value;
-            $value=undef;
-            while (! -x $value) {
-                $value=prompt("dsmadmc command",$dsmadmc);
-            }
-            $dsmadmc=$value;
-            $value=undef;
-            while (! -x $value) {
-                $value=prompt("TSM client config file (dsm.sys UNIX, dsm.opt Windows)",$dsm_config);
-            } 
-            $dsm_config=$value;    
+        print "Could not detect automatically prerequisite.\n";
+        if (-t STDIN) {
+            $dsm_dir=prompt("Install dir for TSM Client where (dsmc, dsmadmc, dsm.*) exists",$dsm_dir);
+            die "$dsm_dir not a directory.\n"   unless (! -d $dsm_dir);
+            $dsmadmc=prompt("dsmadmc command",$dsmadmc);
+            die "$dsmadmc not an executable.\n" unless (! -d $dsmadmc);
+            $dsm_config=prompt("TSM client config file (dsm.sys UNIX, dsm.opt Windows)",$dsm_config);
+            die "$dsm_config not a file.\n"     unless (! -f $dsmadmc);
+        }
     }      
     print "Choose TSM Install directory:  $dsm_dir\n";
     print "Choose TSM dsmadmc command:    $dsmadmc\n";
     print "Choose TSM client config file: $dsm_config\n";
     
     return {
-            TSM_DSMDIR    => $dsm_dir,
-            TSM_DSMCONFIG => $dsm_config,
-            TSM_DSMADMC   => $dsmadmc,
-            };  
+        TSM_DSMDIR    => $dsm_dir,
+        TSM_DSMCONFIG => $dsm_config,
+        TSM_DSMADMC   => $dsmadmc,
+        };  
 }
 
 my $macros        = config_macro();
