@@ -1,0 +1,6 @@
+Revision history for Perl extension DBD::TSM.
+
+0.01  Sat Feb 26 20:51:46 2005
+	- original version; created by h2xs 1.23 with options
+		-A -X -n DBD::TSM
+
