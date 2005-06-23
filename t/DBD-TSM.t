@@ -6,11 +6,36 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 14;
+use Test::More;
+
 BEGIN { 
-use_ok('DBI');
-use_ok('DBD::TSM'); 
+    use_ok('DBI');
+    use_ok('DBD::TSM'); 
 };
+
+unless ($^O eq 'aix' or $^O eq 'linux' or $^O eq 'Win32') {
+    plan skip_all => "Not supported for $^0";
+    exit(0);
+}
+
+unless ($ENV{DBI_DSN} && $ENV{DBI_USER} && $ENV{DBI_PASS}) {
+    plan skip_all => "Environment DBI_USER / DBI_PASS / DBI_DSN not set";
+    exit(0);
+}
+
+my $dbh=DBI->connect(undef,undef,undef,
+                     { 
+                       PrintError => 0,
+                       RaiseError => 0
+                     }
+                     );
+
+unless ($dbh) {
+    plan skip_all => "No TSM started";
+    exit(0);
+}
+
+plan tests => 7; 
 
 no warnings;
 
@@ -21,24 +46,6 @@ no warnings;
 
 #Use standard variable
 
-ok(($^O eq 'aix' or $^O eq 'linux' or $^O eq 'Win32'),"Test OS supported (aix|linux|win32)");
-ok($ENV{DBI_DSN} ne '',"Test environment variable DBI_DSN");
-ok($ENV{DBI_USER} ne '',"Test environment variable DBI_USER");
-ok($ENV{DBI_PASS} ne '',"Test environment variable DBI_PASS");
-exit(2) unless ($ENV{DBI_DSN}   and
-                $ENV{DBI_PASS}  and
-                $ENV{DBI_USER});
-
-#Connect test        
-my $dbh=DBI->connect(undef,undef,undef,
-                     { 
-                       PrintError => 0,
-                       RaiseError => 0
- 
-                    });
-ok($dbh ne undef,"Connect to $ENV{DBI_DSN} as $ENV{DBI_USER}/****");
-exit(2) unless ($dbh);
-
 #Do test
 $sth=$dbh->do('query status');
 ok($sth ne undef,"Do statement");
@@ -46,7 +53,7 @@ ok($sth ne undef,"Do statement");
 #Prepare/Execute test
 my $sth=$dbh->prepare('query ?');
 ok($sth ne undef,"Prepare statement");
-exit(2) unless($sth);
+exit(0) unless($sth);
 $sth->execute('status');
 ok($sth->{NAME}->[0] eq 'Server Name',"Execute statement");
 while (my $row=$sth->fetchrow_hashref()) {

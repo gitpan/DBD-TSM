@@ -35,8 +35,16 @@ List of file changed:
 
 ** VERSION 0.03 - Thu Mar 10 21:16:37 CET 2005
 
-* BUG2:
+* BUG:
 forget configure.pl
+
+* RESPONSE:
+Correct
+
+** VERSION 0.04 - Thu Jun 23 22:20:17 CEST 2005
+
+* BUG:
+Test failed with environment not set
 
 * RESPONSE:
 Correct

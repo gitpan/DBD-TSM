@@ -46,7 +46,6 @@ sub config_macro {
     unless (-d $dsm_dir    and
             -x $dsmadmc    and
             -f $dsm_config) {
-        print "Could not detect automatically prerequisite.\n";
         if (-t STDIN) {
             $dsm_dir=prompt("Install dir for TSM Client where (dsmc, dsmadmc, dsm.*) exists",$dsm_dir);
             die "$dsm_dir not a directory.\n"   unless (! -d $dsm_dir);
@@ -55,6 +54,7 @@ sub config_macro {
             $dsm_config=prompt("TSM client config file (dsm.sys UNIX, dsm.opt Windows)",$dsm_config);
             die "$dsm_config not a file.\n"     unless (! -f $dsmadmc);
         }
+        die "Could not detect automatically TSM prerequisite.\n!! See README file for more information !!\n";
     }      
     print "Choose TSM Install directory:  $dsm_dir\n";
     print "Choose TSM dsmadmc command:    $dsmadmc\n";
