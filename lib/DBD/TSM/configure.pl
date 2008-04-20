@@ -24,8 +24,8 @@ close MAKEFILE               or die "Cannot close $makefile: $!\n";
 sub subst_macro {
     my ($macro_name,$default_value)=@_;
     
-    return (exists $macros{$macro_name})?("use constant $macro_name => '".$macros{$macro_name}."';"):
-                                         ("use constant $macro_name => $default_value");
+    return (exists $macros{$macro_name})?("use constant $macro_name => quotemeta('".$macros{$macro_name}."');"):
+                                         ("use constant $macro_name => $default_value;");
 };
 
 while (<>) {

@@ -1,4 +1,4 @@
-DBD-TSM version 0.01
+DBD-TSM version 0.05
 ====================
 
 First, excuse me for my bad english. If someone want to help me! You could.
@@ -10,8 +10,7 @@ DBD::TSM is a pure perl module. It needs to locate the TSM command below:
 It works with default install directory and file name for AIX, Linux and Windows
 system.
 
-But if you set environment variable DSM_DIR and DSM_CONFIG, I do my best
-to use it as clever as I could.
+But if you set environment variable DSM_DIR and DSM_CONFIG, I use it.
 
 Try to set also DSM_LOG not to log in current directory.
 

@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
-use 5.008003;
+# @(#)Makefile.PL	1.1
+
+use 5.008;
 use ExtUtils::MakeMaker;
 
 use strict;
@@ -33,29 +35,24 @@ sub tsm_choose_dsm_dir {
                                      File::Spec->catfile("","usr","bin","dsmadmc"),
                                      File::Spec->catfile("","usr","tivoli","tsm","client","ba","bin","dsm.sys"),
                                  );
-    ($^O eq 'MSWin32')   and return (File::Spec->catfile($ENV{ProgramFiles},"tivoli","tsm","baclient"),
-                                     File::Spec->catfile($ENV{ProgramFiles},"tivoli","tsm","baclient","dsmadmc"),
-                                     File::Spec->catfile($ENV{ProgramFiles},"tivoli","tsm","baclient","dsm.opt"),
+    ($^O eq 'darwin')    and return (File::Spec->catfile("","Library","Application Support","tivoli","tsm","client","ba","bin"),
+                                     File::Spec->catfile("","Library","Application Support","tivoli","tsm","client","ba","bin","dsmadmc"),
+                                     File::Spec->catfile("","Library","Preferences", "Tivoli Storage Manager","dsm.opt"),
+                                 );
+    ($^O eq 'MSWin32')   and return (File::Spec->catfile($ENV{ProgramFiles},"Tivoli","tsm","baclient"),
+                                     File::Spec->catfile($ENV{ProgramFiles},"Tivoli","tsm","baclient","dsmadmc"),
+                                     File::Spec->catfile($ENV{ProgramFiles},"Tivoli","tsm","baclient","dsm.opt"),
                                     );
     return;
 }
 
 sub config_macro {
     my ($dsm_dir,$dsmadmc,$dsm_config)=tsm_choose_dsm_dir();
-
-    unless (-d $dsm_dir    and
-            -x $dsmadmc    and
-            -f $dsm_config) {
-        if (-t STDIN) {
-            $dsm_dir=prompt("Install dir for TSM Client where (dsmc, dsmadmc, dsm.*) exists",$dsm_dir);
-            die "$dsm_dir not a directory.\n"   unless (! -d $dsm_dir);
-            $dsmadmc=prompt("dsmadmc command",$dsmadmc);
-            die "$dsmadmc not an executable.\n" unless (! -d $dsmadmc);
-            $dsm_config=prompt("TSM client config file (dsm.sys UNIX, dsm.opt Windows)",$dsm_config);
-            die "$dsm_config not a file.\n"     unless (! -f $dsmadmc);
-        }
-        die "Could not detect automatically TSM prerequisite.\n!! See README file for more information !!\n";
-    }      
+    
+    $dsm_dir    = $ENV{DSM_DIR} || 'need_DSM_DIR'                unless (-d $dsm_dir);
+    $dsmadmc    = File::Spec->catfile($ENV{DSM_DIR}, 'dsmadmc')  unless (-f $dsmadmc);
+    $dsm_config = $ENV{DSM_CONFIG} || 'need_DSM_SYS'             unless (-f $dsm_config);
+    
     print "Choose TSM Install directory:  $dsm_dir\n";
     print "Choose TSM dsmadmc command:    $dsmadmc\n";
     print "Choose TSM client config file: $dsm_config\n";
