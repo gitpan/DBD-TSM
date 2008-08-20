@@ -56,3 +56,9 @@ for select statement. Not perfect, try an other method later.
 ** VERSION 0.13 - Sun Apr 20 18:20:16 CEST 2008
 
 Resolve issue with CPAN upload
+
+** VERSION 0.14 - Wed Aug 20 00:37:25 CEST 2008
+
+Update test to work with Perl 5.10 CPAN Test
+
+

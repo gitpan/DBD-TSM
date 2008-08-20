@@ -1,23 +1,28 @@
 DBD-TSM version 0.05
 ====================
 
-First, excuse me for my bad english. If someone want to help me! You could.
-
 DBD::TSM is a pure perl module. It needs to locate the TSM command below:
 
    dsmadmc
    
-It works with default install directory and file name for AIX, Linux and Windows
-system.
+It works with default install directory and file name for :
+- AIX
+- Linux
+- Windows
+- Darwin (not tested by me)
 
-But if you set environment variable DSM_DIR and DSM_CONFIG, I use it.
+However, if you set TSM environment variable :
+- DSM_DIR : directory where to find command
+- DSM_CONFIG : TSM config file
+I use it.
 
-Try to set also DSM_LOG not to log in current directory.
+Try to set also DSM_LOG not to log in your current directory and exist some
+issue with rights with TSM 5.3+.
 
 To run my test successfully you need to:
 - Have a TSM server started
 - A TSM Client full operationnal. i.e.:
-  * TSM Binary installed (dsmadmc is the much important for me)
+  * TSM Binary installed (dsmadmc is the most important in that case)
   * dsm.sys or/and dsm.opt set to work with your tsm server.
     o Check it before with a manual test with:
       dsmc query session command
@@ -27,7 +32,10 @@ To run my test successfully you need to:
    DBI_DSN=dbi:TSM:<your server name>
    DBI_USER=<your tsm user>
    DBI_PASS=<your tsm password>
-   Instance (under UNIX for sh like shell):
+
+I add new tests that use an emulation of 'dsmadmc'.
+
+For instance (under UNIX for sh like shell):
 
 DBI_DSN=dbi:TSM:MYSERVER
 DBI_USER=admin
@@ -63,5 +71,3 @@ Copyright (C) 2005 by Laurent Bendavid
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.3 or,
 at your option, any later version of Perl 5 you may have available.
-
-

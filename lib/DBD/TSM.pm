@@ -33,7 +33,7 @@ use Carp;
 
 our ($VERSION,$err,$errstr,$sqlstate,$drh);
 
-$VERSION = '0.13';
+$VERSION = '0.14';
 ## Error in Makefile.PL, see change file
 
 # Gestion des erreurs DBI
@@ -242,9 +242,9 @@ our $imp_data_size = 0;
 
 sub bind_param {
     my ($sth, $pNum, $val, $attr) = @_;
-    
+
     my $type = (ref $attr) ? $attr->{TYPE} : $attr;
-    
+
     if ($type) {
         my $dbh = $sth->{Database};
         $val = $dbh->quote($sth, $type);
@@ -259,7 +259,7 @@ sub execute {
 
     #Référence sur les paramètres d'exécute
     $sth->finish() if ($sth->{Active});
-    
+
     my $params_ref    = (@bind_values) ? \@bind_values : $sth->FETCH('tsm_params');
     my $num_of_param  = $sth->FETCH('NUM_OF_PARAMS');
     my $num_param     = scalar @{$params_ref};
@@ -307,7 +307,7 @@ sub execute {
     $sth->STORE(TYPE          => [ (DBI::SQL_VARCHAR()) x @{$fields_ref} ]);
     $sth->STORE(SCALE         => undef);
     $sth->STORE(PRECISION     => undef);
-    
+
     DEBUG && warn "DEBUG:Execute: ", Dumper($data_ref);
 
     return (@{$data_ref} || '0E0');
@@ -318,9 +318,9 @@ sub fetchrow_arrayref {
 
      my $data_ref = $sth->FETCH('tsm_data');
      my $row_ref  = shift @{$data_ref};
-     
+
      DEBUG && warn "DEBUG:Line: ", Dumper($row_ref);
-     
+
      # Fin du tableau
      unless ($row_ref) {
         DEBUG && "DEBUG:Line: Fini.\n";
@@ -491,7 +491,7 @@ field and send a warning message.
 
 =head1 NEXT
 
-Rewrite fetch to use a filehandle to read dsmadmc output line by line to redure memory 
+Rewrite fetch to use a filehandle to read dsmadmc output line by line to redure memory
 requirement. I have some idea, need just time to do it. Not sure it works on Windows.
 
 =head1 AUTHOR
